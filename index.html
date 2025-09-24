@@ -157,7 +157,8 @@
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Your Character Chronicle</h2>
                 <p class="mb-4 text-gray-400">This is the complete summary of your character's backstory.</p>
                 <div id="final-summary-output" class="bg-gray-800 border border-amber-800 p-6 rounded-lg mt-4 text-amber-100 space-y-4"></div>
-                 <button id="btn-start-over" class="font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 bg-gray-600 hover:bg-gray-500 text-white mt-6">Start Over</button>
+                 <button id="btn-copy-summary" class="font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 bg-amber-700 hover:bg-amber-600 text-white mt-6">Copy Summary</button>
+                 <button id="btn-start-over" class="font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 bg-gray-600 hover:bg-gray-500 text-white mt-6 ml-2">Start Over</button>
             </section>
 
         </main>
@@ -764,6 +765,101 @@
         document.getElementById('final-summary-output').innerHTML = summaryHTML;
     };
     
+    const generateFinalSummaryText = () => {
+        const { homeland, nation, settlement, background, family, allyDetails, rivalDetails, fatefulMomentDetails, secret, spyInfo } = character;
+
+        const familyAllies = family.powerfulRelationships.filter(r => r.type === 'ally');
+        const familyRivals = family.powerfulRelationships.filter(r => r.type === 'rival');
+
+        let summaryText = `=== Identity & Origin ===\n`;
+        summaryText += `Homeland: ${homeland.name}\n`;
+        summaryText += ` - ${homeland.description}\n`;
+        summaryText += `Nation: ${nation.name}\n`;
+        summaryText += ` - ${nation.description}\n`;
+        summaryText += `Home Settlement: ${settlement.name} (${settlement.size})\n`;
+        summaryText += ` - ${settlement.description}\n`;
+        summaryText += `Background: ${background.name}\n`;
+        summaryText += ` - ${background.description}\n`;
+        summaryText += `  - Personality Trait: ${background.personalityTrait}\n`;
+        summaryText += `  - Ideal: ${background.ideal}\n`;
+        summaryText += `  - Bond: ${background.bond}\n`;
+        summaryText += `  - Flaw: ${background.flaw}\n`;
+        if (background.specialData && background.specialData.length > 0) {
+            background.specialData.forEach(s => {
+                summaryText += `  - ${s.name}: ${s.value}\n`;
+            });
+        }
+        if (spyInfo) {
+            summaryText += `SPY INFO: You are a spy from ${spyInfo.homeNation}, targeting ${spyInfo.targetNation}.\n`;
+        }
+
+        summaryText += `\n=== Family ===\n`;
+        summaryText += `Parents: ${family.parents}\n`;
+        summaryText += `Siblings: ${family.siblings}\n`;
+
+        summaryText += `\n=== Relationships ===\n`;
+        summaryText += `Family Allies (${familyAllies.length}):\n`;
+        if (familyAllies.length > 0) {
+            familyAllies.forEach(r => {
+                summaryText += ` - ${r.identity}: ${r.text}\n`;
+            });
+        } else {
+            summaryText += ` - None\n`;
+        }
+        summaryText += `Family Rivals (${familyRivals.length}):\n`;
+        if (familyRivals.length > 0) {
+            familyRivals.forEach(r => {
+                summaryText += ` - ${r.identity}: ${r.text}\n`;
+            });
+        } else {
+            summaryText += ` - None\n`;
+        }
+        summaryText += `Acquired Allies (${allyDetails.length}):\n`;
+        if (allyDetails.length > 0) {
+            allyDetails.forEach(a => {
+                summaryText += ` - ${a.identity}: ${a.relationship}\n`;
+            });
+        } else {
+            summaryText += ` - None\n`;
+        }
+        summaryText += `Acquired Rivals (${rivalDetails.length}):\n`;
+        if (rivalDetails.length > 0) {
+            rivalDetails.forEach(r => {
+                summaryText += ` - ${r.identity}: ${r.relationship}\n`;
+            });
+        } else {
+            summaryText += ` - None\n`;
+        }
+
+        summaryText += `\n=== Fateful Moments (${fatefulMomentDetails.length}) ===\n`;
+        if (fatefulMomentDetails.length > 0) {
+            fatefulMomentDetails.forEach(m => {
+                summaryText += ` - [${m.source}] ${m.event}\n`;
+            });
+        } else {
+            summaryText += ` - None\n`;
+        }
+
+        summaryText += `\n=== Mysterious Secret ===\n`;
+        summaryText += `"${secret.text}"\n`;
+
+        return summaryText;
+    };
+
+    const copySummaryToClipboard = () => {
+        const summaryText = generateFinalSummaryText();
+        navigator.clipboard.writeText(summaryText).then(() => {
+            const copyButton = document.getElementById('btn-copy-summary');
+            copyButton.textContent = 'Copied!';
+            setTimeout(() => {
+                copyButton.textContent = 'Copy Summary';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy summary. Please try again.');
+        });
+    };
+
     // --- MODAL & RESET LOGIC --- //
     
     const customPrompt = (title, text, options) => {
@@ -874,6 +970,7 @@
 
     // --- INITIALIZATION --- //
     document.getElementById('btn-start-over').addEventListener('click', resetGenerator);
+    document.getElementById('btn-copy-summary').addEventListener('click', copySummaryToClipboard);
 
     async function loadData() {
         console.log("Starting data load...");
