@@ -1,0 +1,12 @@
+[
+    { "range": [1, 10], "text": "The ally is a loyal pet (CR 1/8 or lower)." },
+    { "range": [11, 20], "text": "This person lost a bet to you and is still trying to scrounge up the cash to pay you back." },
+    { "range": [21, 30], "text": "This person was once a beggar to whom you gave a large sum of money. They have transformed their life and want to repay you." },
+    { "range": [31, 40], "text": "You were this person’s favorite drinking buddy, and their home is always open to you." },
+    { "range": [41, 50], "text": "This person was once your mentor, but you left before completing your training. You are welcome to return." },
+    { "range": [51, 60], "text": "You bonded with this person over a traumatic event. If you are in danger, they will try to aid you." },
+    { "range": [61, 70], "text": "You and this person share a terrible secret. They will help you keep this secret safe." },
+    { "range": [71, 80], "text": "This person fell in love with you and remains your closest friend." },
+    { "range": [81, 90], "text": "You and this person were affected by powerful magic and share a telepathic connection within 1 mile." },
+    { "range": [91, 100], "text": "This person owes you their life and will do anything to protect you." }
+]

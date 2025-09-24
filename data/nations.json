@@ -1,0 +1,23 @@
+{
+    "gildedNations": [
+        { "roll": 1, "name": "Arfordir" }, { "roll": 2, "name": "Blū" }, { "roll": 3, "name": "The Confederated State of the Half Heights" },
+        { "roll": 4, "name": "Farnear" }, { "roll": 5, "name": "Fearledell" }, { "roll": 6, "name": "Fook & Took" },
+        { "roll": 7, "name": "Haroldford" }, { "roll": 8, "name": "Icebeach" }, { "roll": 9, "name": "The Iron Bash" },
+        { "roll": 10, "name": "The Province of Southern Fair" }, { "roll": 11, "name": "RoswiN" }, { "roll": 12, "name": "The Sovereign Island Nation of Relèv" }
+    ],
+    "beccinEmpire": [
+        { "roll": 1, "name": "Bec" }, { "roll": 2, "name": "Goldwind" }, { "roll": 3, "name": "Last Elven State" }, { "roll": 4, "name": "Mt. Egma" }
+    ],
+    "astrousia": [
+        { "range": [1, 3], "name": "Nutsten", "size": "City" }, { "roll": 4, "name": "Tooliken", "size": "Town" }, { "roll": 5, "name": "Unlik", "size": "Town" },
+        { "roll": 6, "name": "Walkers", "size": "Town" }, { "range": [7, 12], "name": "Jungle", "size": "Village" }
+    ],
+    "athenium": [
+        { "range": [1, 8], "name": "Delphi", "size": "Mega City" }, { "range": [9, 10], "name": "Delphi Suburb", "size": "City" },
+        { "roll": 11, "name": "Northern City", "size": "City" }, { "roll": 12, "name": "Southern City", "size": "City" }
+    ],
+    "other": [
+        { "range": [1, 11], "name": "Frozen North" }, { "range": [12, 43], "name": "Naga" }, { "range": [44, 54], "name": "Oldlin" },
+        { "range": [55, 65], "name": "Random Island" }, { "range": [66, 100], "name": "Wolgari" }
+    ]
+}

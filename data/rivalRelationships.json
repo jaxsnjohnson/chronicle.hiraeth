@@ -1,0 +1,12 @@
+[
+    { "range": [1, 10], "text": "This person believes that you murdered their sibling and is out for your blood." },
+    { "range": [11, 20], "text": "You bested this person in combat, but they believe you cheated. They long for a rematch." },
+    { "range": [21, 30], "text": "You broke a promise to this person, causing them to suffer greatly. They seek to see you suffer the same." },
+    { "range": [31, 40], "text": "You once loved this person but broke their heart. They are obsessed with making you feel the same pain." },
+    { "range": [41, 50], "text": "This person was ordered to arrest you and doggedly hunts you wherever you go." },
+    { "range": [51, 60], "text": "This person thinks you were replaced by a doppelganger and is trying to 'free' the original you." },
+    { "range": [61, 70], "text": "You fled from your home under mysterious circumstances. This person is obsessed with finding out why." },
+    { "range": [71, 80], "text": "You and this person tried to harness power beyond your control, leaving them disfigured. They now seek to turn it upon you." },
+    { "range": [81, 90], "text": "You helped this person once, and now they always come to you whenever they need help." },
+    { "range": [91, 100], "text": "This person wants to be your friend, but their 'help' has always made your life harder." }
+]
