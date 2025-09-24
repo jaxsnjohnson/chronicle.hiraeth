@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiraeth Chronicle Backstory Generator</title>
+    <title>Pythia Chronicle Backstory Generator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📜</text></svg>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
+    <meta property="og:title" content="Pythia Chronicle Backstory Generator">
+    <meta property="og:description" content="An interactive, story-driven character backstory generator for TTRPGs.">
+    <meta property="og:image" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
+    <meta property="twitter:title" content="Pythia Chronicle Backstory Generator">
+    <meta property="twitter:description" content="An interactive, story-driven character backstory generator for TTRPGs.">
+    <meta property="twitter:image" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -387,11 +403,43 @@
         
         const roll = rollDie(20);
         const background = findInTable(db.backgrounds, roll);
-        character.background = { name: background.name, description: background.description };
+
+        const personalityTrait = background.personalityTraits[rollDie(background.personalityTraits.length) - 1];
+        const ideal = background.ideals[rollDie(background.ideals.length) - 1];
+        const bond = background.bonds[rollDie(background.bonds.length) - 1];
+        const flaw = background.flaws[rollDie(background.flaws.length) - 1];
+
+        let specialHtml = '';
+        let specialData = [];
+        if (background.special && background.special.length > 0) {
+            background.special.forEach(s => {
+                const option = s.options[rollDie(s.options.length) - 1];
+                specialHtml += `<p><span class="font-bold text-amber-300">${s.name}:</span> ${option}</p>`;
+                specialData.push({ name: s.name, value: option });
+            });
+        }
+
+        character.background = {
+            name: background.name,
+            description: background.description,
+            personalityTrait,
+            ideal,
+            bond,
+            flaw,
+            specialData,
+            specialHtml
+        };
         
         document.getElementById('result-background').innerHTML = `
             <p><span class="font-bold text-amber-300">Background:</span> ${character.background.name}</p>
             <p class="text-sm text-gray-400 italic pl-4">${character.background.description}</p>
+            <div class="mt-4 border-t border-amber-800/50 pt-4">
+                <p class="mb-1"><strong class="text-amber-300">Personality Trait:</strong> ${character.background.personalityTrait}</p>
+                <p class="mb-1"><strong class="text-amber-300">Ideal:</strong> ${character.background.ideal}</p>
+                <p class="mb-1"><strong class="text-amber-300">Bond:</strong> ${character.background.bond}</p>
+                <p class="mb-1"><strong class="text-amber-300">Flaw:</strong> ${character.background.flaw}</p>
+                ${specialHtml}
+            </div>
         `;
         showLoading('background', false);
         setControls('background', true);
@@ -683,6 +731,13 @@
             <p class="text-sm text-gray-400 italic pl-4">${settlement.description}</p>
             <p class="mt-2"><strong class="text-amber-300">Background:</strong> ${background.name}</p>
             <p class="text-sm text-gray-400 italic pl-4">${background.description}</p>
+            <div class="mt-2 pl-4 border-l-2 border-amber-800/50">
+                <p class="mb-1"><strong class="text-amber-300">Personality Trait:</strong> ${background.personalityTrait}</p>
+                <p class="mb-1"><strong class="text-amber-300">Ideal:</strong> ${background.ideal}</p>
+                <p class="mb-1"><strong class="text-amber-300">Bond:</strong> ${background.bond}</p>
+                <p class="mb-1"><strong class="text-amber-300">Flaw:</strong> ${background.flaw}</p>
+                ${background.specialHtml}
+            </div>
             ${spyInfo ? `<p class="text-sm text-cyan-300">You are a spy from ${spyInfo.homeNation}, targeting ${spyInfo.targetNation}.</p>`: ''}
             
             <h3 class="text-2xl font-bold text-amber-400 border-b border-amber-800 pb-2 mb-2 mt-4">Family</h3>
