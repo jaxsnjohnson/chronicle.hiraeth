@@ -65,13 +65,13 @@
             <p class="text-xl text-gray-400 mt-2">A Backstory Generator</p>
         </header>
 
-        <main id="generator-container" class="space-y-6">
+        <main id="generator-container" class="space-y-6 opacity-50 pointer-events-none">
             <!-- Step 1: Homeland -->
             <section id="step-homeland" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg active">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 1: Homeland</h2>
                 <p class="mb-4 text-gray-400">Your story begins with the land of your birth. Click the button to determine where your character is from.</p>
                 <div id="controls-homeland">
-                    <!-- Buttons injected by JS -->
+                     <div class="flex items-center justify-center"><div class="loader"></div><p>Loading data...</p></div>
                 </div>
                 <div id="result-homeland" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
@@ -159,385 +159,9 @@
     </div>
     
 <script type="module">
-    // --- DATA --- //
-    const db = {
-        homeland: [
-            { range: [1, 40], name: "Gilded Nations", description: "A wealthy, competitive coalition of city-states and kingdoms known for artisans, merchants, and complex politics." },
-            { range: [41, 80], name: "Beccin Empire", description: "A sprawling, ancient empire defined by its strict laws, powerful legions, and a history of conquest." },
-            { range: [81, 90], name: "Astrousia", description: "A mysterious jungle continent dotted with independent city-states, ancient ruins, and exotic beasts." },
-            { range: [91, 95], name: "Athenium", description: "A beacon of knowledge and arcane mastery, where magic is woven into the fabric of everyday life." },
-            { range: [96, 100], name: "Other", description: "The vast, untamed lands beyond the major powers, from frozen wastes to scattered islands." }
-        ],
-        gildedNations: [
-            { roll: 1, name: "Arfordir" }, { roll: 2, name: "Blū" }, { roll: 3, name: "The Confederated State of the Half Heights" },
-            { roll: 4, name: "Farnear" }, { roll: 5, name: "Fearledell" }, { roll: 6, name: "Fook & Took" },
-            { roll: 7, name: "Haroldford" }, { roll: 8, name: "Icebeach" }, { roll: 9, name: "The Iron Bash" },
-            { roll: 10, name: "The Province of Southern Fair" }, { roll: 11, name: "RoswiN" }, { roll: 12, name: "The Sovereign Island Nation of Relèv" }
-        ],
-        beccinEmpire: [
-            { roll: 1, name: "Bec" }, { roll: 2, name: "Goldwind" }, { roll: 3, name: "Last Elven State" }, { roll: 4, name: "Mt. Egma" }
-        ],
-        astrousia: [
-            { range: [1, 3], name: "Nutsten", size: "City" }, { roll: 4, name: "Tooliken", size: "Town" }, { roll: 5, name: "Unlik", size: "Town" },
-            { roll: 6, name: "Walkers", size: "Town" }, { range: [7, 12], name: "Jungle", size: "Village" }
-        ],
-        athenium: [
-            { range: [1, 8], name: "Delphi", size: "Mega City" }, { range: [9, 10], name: "Delphi Suburb", size: "City" },
-            { roll: 11, name: "Northern City", size: "City" }, { roll: 12, name: "Southern City", size: "City" }
-        ],
-        other: [
-            { range: [1, 11], name: "Frozen North" }, { range: [12, 43], name: "Naga" }, { range: [44, 54], name: "Oldlin" },
-            { range: [55, 65], name: "Random Island" }, { range: [66, 100], name: "Wolgari" }
-        ],
-        settlements: {
-            "Goldwind": [ { range: [1,1], name: "Bend Keep", size: "Town" }, { range: [2,2], name: "Frostbend", size: "Town" }, { range: [3,3], name: "Oimerbend", size: "Town" }, { range: [4,4], name: "Richmond", size: "Town" }, { range: [5,5], name: "The Lost City of Cimmeora", size: "Village" }, { range: [6,10], name: "Vermonbend", size: "City" } ],
-            "Frozen North": [ { range: [1, 2], name: "Small Village", size: "Village" }, { range: [3, 4], name: "Wandering Tribe", size: "Town" } ],
-            "Naga": [ { roll: 1, name: "Fhoe", size: "Village" }, { roll: 2, name: "Lucinders", size: "Town" }, { roll: 3, name: "No Beard", size: "City" }, { roll: 4, name: "Wingate", size: "City" } ],
-            "Oldlin": [ { roll: 1, name: "Goldstone", size: "Town" }, { roll: 2, name: "Grey Sisters", size: "Village" }, { roll: 3, name: "Knoll", size: "Town" }, { roll: 4, name: "Nort", size: "Town" } ],
-            "Arfordir": [ { roll: 1, name: "Attergo", size: "City" }, { roll: 2, name: "Crystal Cove", size: "Town" }, { roll: 3, name: "Gelwood", size: "Village" }, { roll: 4, name: "Rockdrift", size: "City" } ],
-            "Fook & Took": [ { range: [1, 2], name: "Fook", size: "City" }, { range: [3, 4], name: "Took", size: "City" } ],
-            "Icebeach": [ { roll: 1, name: "Casgate", size: "Village" }, { roll: 2, name: "Flamore", size: "Village" }, { range: [3, 7], name: "The Fractured Point", size: "City" }, { roll: 8, name: "Howlentop", size: "Village" }, { roll: 9, name: "Icemoor", size: "Village" }, { roll: 10, name: "Koria's Village", size: "Village" }, { roll: 11, name: "Morena's Fang", size: "Village" }, { roll: 12, name: "Nil Buldinr", size: "Village" }, { roll: 13, name: "Niror", size: "Village" }, { roll: 14, name: "Quilt", size: "Village" }, { roll: 15, name: "Shiverwallow", size: "Village" }, { roll: 16, name: "Sleetmond", size: "Village" }, { roll: 17, name: "Thrawbreak", size: "Village" }, { roll: 19, name: "Whitedrift", size: "Village" }, { roll: 20, name: "Winterhold Keep", size: "Village" } ],
-            "Wolgari": [ { range: [1, 4], name: "Alefall", size: "Town" }, { range: [5, 8], name: "Blue Kobold Capital", size: "City" }, { range: [9, 12], name: "Green Kobold Capital", size: "City" }, { range: [13, 15], name: "Lighthouse Point", size: "Village" }, { range: [16, 19], name: "Mercy's Bay", size: "Town" }, { range: [20, 23], name: "Millmouth", size: "Town" }, { range: [24, 26], name: "Red Kobold Capital", size: "City" }, { range: [27, 32], name: "Redbrick", size: "Town" }, { range: [33, 35], name: "Taromash", size: "Village" }, { range: [36, 45], name: "The Manangerie", size: "City" }, { range: [46, 95], name: "Trier", size: "Mega City" }, { range: [96, 98], name: "Verthe", size: "Town" }, { range: [99, 100], name: "Yellowhill", size: "Village" } ]
-        },
-        backgrounds: [
-            { roll: 1, name: "Acolyte", description: "You served a temple, learning sacred rites. You are a trusted member of your faith." },
-            { roll: 2, name: "Charlatan", description: "You're a master of deceit, using wit and charm to live a life of scams and cons." },
-            { roll: 3, name: "Criminal", description: "You have a history of breaking the law and contacts within the criminal underworld." },
-            { roll: 4, name: "Entertainer", description: "You lived a life of performance, captivating audiences and earning renown for your art." },
-            { roll: 5, name: "Folk Hero", description: "You come from humble beginnings, but an act of great courage has made you a champion of the common people." },
-            { roll: 6, name: "Guild Artisan", description: "You were a member of an artisan's guild, skilled in a specific trade and connected to its network." },
-            { roll: 7, name: "Hermit or Student", description: "You lived in seclusion, either for quiet contemplation or dedicated study, uncovering a great secret." },
-            { roll: 8, name: "Noble", description: "You were born to privilege, wielding social power and bearing the weight of a family name." },
-            { roll: 9, name: "Outlander", description: "You grew up in the wilds, far from civilization, with an expert knowledge of survival and the natural world." },
-            { roll: 10, name: "Sage", description: "You are a master of lore, having spent your life in the pursuit of knowledge." },
-            { roll: 11, name: "Sailor or Marine", description: "You have spent your life on the sea, facing its dangers and navigating by the stars." },
-            { roll: 12, name: "Soldier", description: "You served in an army, defined by discipline, rank, and the harsh realities of war." },
-            { roll: 13, name: "Spy", description: "You operated in the shadows, a life of intrigue, espionage, and carefully guarded secrets." },
-            { roll: 14, name: "Urchin or Smuggler", description: "You grew up on the streets, surviving by your wits and learning the secret ways of your city." },
-            { roll: 15, name: "Special Agent", description: "You worked for a clandestine organization, undertaking secret missions for a hidden cause." },
-            { roll: 16, name: "Archaeologist or Anthropologist", description: "You delve into the past, uncovering ancient artifacts and studying forgotten cultures." },
-            { roll: 17, name: "Fisher", description: "Your life has been tied to the water, providing for your community by net and line." },
-            { roll: 18, name: "Investigator", description: "You have a knack for solving puzzles and uncovering the truth, often in the darkest of places." },
-            { roll: 19, name: "Inheritor", description: "You have received a significant inheritance—an item of power or a destiny you must fulfill." },
-            { roll: 20, name: "Bounty Hunter", description: "You make your living tracking down others for coin, operating on either side of the law." }
-        ],
-        socialStatus: {
-            "Acolyte": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { special: "faith" }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 1, rivals: 0 } },
-            "Charlatan": { "Gilded Nations": { allies: 0, rivals: 0 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 0, rivals: 0 }, "Athenium": { allies: 0, rivals: 1 }, "Other": { allies: 0, rivals: 0 } },
-            "Criminal": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 0, rivals: 1 }, "Other": { allies: 1, rivals: 0 } },
-            "Entertainer": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 0, rivals: 1 } },
-            "Folk Hero": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 0, rivals: 1 }, "Athenium": { allies: 0, rivals: 0 }, "Other": { allies: 0, rivals: 0 } },
-            "Guild Artisan": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 0, rivals: 1 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 0, rivals: 0 } },
-            "Hermit or Student": { "Gilded Nations": { allies: 0, rivals: 0 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { special: "student" }, "Other": { allies: 0, rivals: 0 } },
-            "Noble": { "Gilded Nations": { allies: 1, rivals: 1 }, "Beccin Empire": { allies: 2, rivals: 1 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 1, rivals: 1 }, "Other": { allies: 0, rivals: 0 } },
-            "Outlander": { "Gilded Nations": { allies: 0, rivals: 0 }, "Beccin Empire": { allies: 0, rivals: 0 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 0, rivals: 0 }, "Other": { allies: 2, rivals: 0 } },
-            "Sage": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 1, rivals: 0 }, "Athenium": { allies: 0, rivals: 2 }, "Other": { allies: 2, rivals: 0 } },
-            "Sailor or Marine": { "Gilded Nations": { allies: 1, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 0 }, "Astrousia": { allies: 2, rivals: 1 }, "Athenium": { allies: 0, rivals: 0 }, "Other": { allies: 1, rivals: 1 } },
-            "Soldier": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 2, rivals: 0 }, "Astrousia": { allies: 0, rivals: 0 }, "Athenium": { allies: 1, rivals: 1 }, "Other": { allies: 0, rivals: 0 } },
-            "Spy": { special: "spy" },
-            "Urchin or Smuggler": { "Gilded Nations": { allies: 1, rivals: 1 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 0, rivals: 1 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 0, rivals: 1 } },
-            "Special Agent": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 0, rivals: 0 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 0, rivals: 0 } },
-            "Archaeologist or Anthropologist": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 3, rivals: 0 }, "Athenium": { allies: 2, rivals: 1 }, "Other": { allies: 3, rivals: 0 } },
-            "Fisher": { "Gilded Nations": { allies: 1, rivals: 0 }, "Beccin Empire": { allies: 1, rivals: 0 }, "Astrousia": { allies: 1, rivals: 1 }, "Athenium": { allies: 0, rivals: 0 }, "Other": { allies: 1, rivals: 1 } },
-            "Investigator": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 1, rivals: 1 }, "Athenium": { allies: 0, rivals: 1 }, "Other": { allies: 0, rivals: 0 } },
-            "Inheritor": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 1 }, "Astrousia": { allies: 0, rivals: 0 }, "Athenium": { allies: 0, rivals: 2 }, "Other": { allies: 0, rivals: 0 } },
-            "Bounty Hunter": { "Gilded Nations": { allies: 0, rivals: 1 }, "Beccin Empire": { allies: 0, rivals: 2 }, "Astrousia": { allies: 0, rivals: 3 }, "Athenium": { allies: 1, rivals: 0 }, "Other": { allies: 0, rivals: 2 } }
-        },
-        familySize: {
-            "Village": { parents: [{range: [1,15], val: "2 or more"}, {range: [16,50], val: "2"}, {range: [51,89], val: "1"}, {range: [90,100], val: "0"}], siblings: [{range: [1,15], val: "2d4+3"}, {range: [16,50], val: "2d4"}, {range: [51,89], val: "1d4"}, {range: [90,100], val: "0"}] },
-            "Town": { parents: [{range: [1,3], val: "2 or more"}, {range: [4,10], val: "2"}, {range: [11,80], val: "1"}, {range: [81,90], val: "0"}, {range: [91,100], val: "0"}], siblings: [{range: [1,3], val: "2d4+2"}, {range: [4,10], val: "2d4"}, {range: [11,80], val: "1d4"}, {range: [81,90], val: "1d2"}, {range: [91,100], val: "0"}] },
-            "City": { parents: [{range: [1,11], val: "3 or more"}, {range: [12,62], val: "2"}, {range: [63,89], val: "1"}, {range: [90,93], val: "0"}, {range: [94,100], val: "0"}], siblings: [{range: [1,11], val: "2d4+2"}, {range: [12,62], val: "2d4"}, {range: [63,89], val: "1d4"}, {range: [90,93], val: "1d2"}, {range: [94,100], val: "0"}] },
-            "MegaCity": { parents: [{range: [1,10], val: "3 or more"}, {range: [11,80], val: "2"}, {range: [81,90], val: "1"}, {range: [91,95], val: "0"}, {range: [96,100], val: "0"}], siblings: [{range: [1,10], val: "2d4+1"}, {range: [11,80], val: "2d4"}, {range: [81,90], val: "1d4"}, {range: [91,95], val: "1d2"}, {range: [96,100], val: "0"}] }
-        },
-        familyRelationships: [
-            { range: [1, 10], type: "rival", text: "You thought you killed this family member, but now they’re out for your blood." },
-            { range: [11, 20], type: "rival", text: "You insulted this family member so gravely that they left your life forever. They will return to settle the score." },
-            { range: [21, 30], type: "rival", text: "You have always been better than this family member at something. They grew jealous and will return to best you." },
-            { range: [31, 40], type: "rival", text: "You uncovered a secret about this family member. They now seek to unveil your darkest secret." },
-            { range: [41, 50], type: "rival", text: "You and this family member have a friendly rivalry and constantly test each other's skills." },
-            { range: [51, 60], type: "ally", text: "This family member owes you a debt. They’ll help you, but only to clear the slate." },
-            { range: [61, 70], type: "ally", text: "This family member loves you but you were never close. They’ll help you as long as there is no risk of injury or death." },
-            { range: [71, 80], type: "ally", text: "This family member caused you a horrible accident as a child and feels incredible guilt." },
-            { range: [81, 90], type: "ally", text: "This family member left long ago, promising to return in your hour of greatest need." },
-            { range: [91, 100], type: "ally", text: "This family member has always loved you with all their heart and would do anything for you." }
-        ],
-        allyRelationships: [
-            { range: [1, 10], text: "The ally is a loyal pet (CR 1/8 or lower)." },
-            { range: [11, 20], text: "This person lost a bet to you and is still trying to scrounge up the cash to pay you back." },
-            { range: [21, 30], text: "This person was once a beggar to whom you gave a large sum of money. They have transformed their life and want to repay you." },
-            { range: [31, 40], text: "You were this person’s favorite drinking buddy, and their home is always open to you." },
-            { range: [41, 50], text: "This person was once your mentor, but you left before completing your training. You are welcome to return." },
-            { range: [51, 60], text: "You bonded with this person over a traumatic event. If you are in danger, they will try to aid you." },
-            { range: [61, 70], text: "You and this person share a terrible secret. They will help you keep this secret safe." },
-            { range: [71, 80], text: "This person fell in love with you and remains your closest friend." },
-            { range: [81, 90], text: "You and this person were affected by powerful magic and share a telepathic connection within 1 mile." },
-            { range: [91, 100], text: "This person owes you their life and will do anything to protect you." }
-        ],
-        rivalRelationships: [
-            { range: [1, 10], text: "This person believes that you murdered their sibling and is out for your blood." },
-            { range: [11, 20], text: "You bested this person in combat, but they believe you cheated. They long for a rematch." },
-            { range: [21, 30], text: "You broke a promise to this person, causing them to suffer greatly. They seek to see you suffer the same." },
-            { range: [31, 40], text: "You once loved this person but broke their heart. They are obsessed with making you feel the same pain." },
-            { range: [41, 50], text: "This person was ordered to arrest you and doggedly hunts you wherever you go." },
-            { range: [51, 60], text: "This person thinks you were replaced by a doppelganger and is trying to 'free' the original you." },
-            { range: [61, 70], text: "You fled from your home under mysterious circumstances. This person is obsessed with finding out why." },
-            { range: [71, 80], text: "You and this person tried to harness power beyond your control, leaving them disfigured. They now seek to turn it upon you." },
-            { range: [81, 90], text: "You helped this person once, and now they always come to you whenever they need help." },
-            { range: [91, 100], text: "This person wants to be your friend, but their 'help' has always made your life harder." }
-        ],
-        allyRivalIdentities: [
-            { range: [1, 5], name: "Commoner", fateful: 0 }, { range: [6, 10], name: "Acolyte", fateful: 0 },
-            { range: [11, 15], name: "Bandit", fateful: 0 }, { range: [16, 20], name: "Bandit Captain", fateful: 0 },
-            { range: [21, 25], name: "Berserker", fateful: 0 }, { range: [26, 30], name: "Cultist", fateful: 0 },
-            { range: [31, 35], name: "Cult Fanatic", fateful: 1 }, { range: [36, 40], name: "Druid", fateful: 0 },
-            { range: [41, 45], name: "Gladiator", fateful: 1 }, { range: [46, 50], name: "Guard", fateful: 0 },
-            { range: [51, 55], name: "Knight", fateful: 0 }, { range: [56, 60], name: "Priest", fateful: 0 },
-            { range: [61, 65], name: "Scout", fateful: 0 }, { range: [66, 70], name: "Spy", fateful: 0 },
-            { range: [71, 75], name: "Tribal Warrior", fateful: 0 }, { range: [76, 80], name: "Veteran", fateful: 0 },
-            { range: [81, 84], name: "Mage", fateful: 1 }, { range: [85, 88], name: "Noble", fateful: 1 },
-            { range: [89, 92], name: "Assassin", fateful: 1 }, { range: [93, 94], name: "Blood Hunter", fateful: 1 },
-            { range: [95, 96], name: "Good/Neutral Werebeast", fateful: 1 }, { range: [97, 98], name: "Evil Werebeast", fateful: 1 },
-            { range: [99, 99], name: "Archmage", fateful: 1 }, { range: [100, 100], name: "High Proxy", fateful: 2 }
-        ],
-        fatefulMoments: [
-            { range: [1,1], text: "Your parents were murdered. Gain proficiency in Stealth and Survival." },
-            { range: [2,2], text: "You found a dying dark elf who gave you an amulet of proof against detection and location." },
-            { range: [3,3], text: "A mysterious stranger gave you a permanent magic item (from DMG table B)." },
-            { range: [4,4], text: "You survived a magical storm and now have prophetic dreams. Gain proficiency in Arcana or Religion." },
-            { range: [5,5], text: "A famous warrior trained you. Gain proficiency with a martial weapon of your choice, a special version of it, and the Martial Adept feat." },
-            { range: [6,6], text: "You were the sole survivor of a monster raid on your home. Gain proficiency in Stealth or with martial weapons." },
-            { range: [7,7], text: "A famous mage tutored you. You have a spellbook and the Magic Initiate feat." },
-            { range: [8,8], text: "You spent a year with a traveling circus. Gain proficiency in Acrobatics or Performance and with the disguise kit." },
-            { range: [9,9], text: "You were transformed into a bear for a year. You can cast Speak with Animals at will." },
-            { range: [10,10], text: "You were press-ganged into military service. Gain proficiency with medium armor, shields, and martial weapons, but suffer from indefinite madness." },
-            { range: [11,11], text: "Kidnapped by bandits, you escaped with the help of an old thief. Gain proficiency with thieves' tools and in Stealth." },
-            { range: [12,12], text: "A demon lord visited your dream. You can cast Find Familiar (as a quasit) but suffer from indefinite madness." },
-            { range: [13,13], text: "You were attacked by evil lycanthropes and are now cursed with lycanthropy (DM's choice)." },
-            { range: [14,14], text: "You were saved by a good lycanthrope and given the gift of lycanthropy with your consent." },
-            { range: [15,15], text: "You saved a pseudodragon, which now loyally follows you." },
-            { range: [16,16], text: "You nearly died from a disease, but were given a periapt of health to suppress it." },
-            { range: [17,17], text: "You were exiled or imprisoned. Gain proficiency in Intimidation and you know thieves' cant." },
-            { range: [18,18], text: "You saved a lost horse. You own a riding horse and saddle, and have proficiency in Animal Handling." },
-            { range: [19,19], text: "You found a treasure map in a mysterious tome." },
-            { range: [20,20], text: "A letter revealed you are the secret child of a noble family. You have 100gp and a signet ring." },
-            { range: [21,21], text: "You met circus performers and were gifted a common magic item (Snugglebeat). Gain proficiency in Performance." },
-            { range: [22,22], text: "Blessed by a minor deity for your bravery. Gain proficiency with shields OR learn the Shield spell (1/long rest)." },
-            { range: [23,23], text: "A parent disappeared, leaving a note and a +1 longsword. You have proficiency with longswords." },
-            { range: [24,24], text: "You survived a magical storm. Gain the Elemental Adept feat and a damage cantrip (Con-based)." },
-            { range: [25,25], text: "An archdevil spoke to you in a dream. You can cast Find Familiar (as an imp) but suffer from indefinite madness." },
-            { range: [26,26], text: "You survived a deadly fall and were visited by a goddess. Gain proficiency in Arcana and Religion." },
-            { range: [27,27], text: "You touched a giant's runestone and can now cast Enlarge/Reduce (enlarge only) once per day." },
-            { range: [28,28], text: "A horde of monsters attacked your home. You gain the Alert feat." },
-            { range: [29,29], text: "You survived for years in a monster-infested dungeon. You gain the Dungeon Delver feat." },
-            { range: [30,30], text: "You escaped slavery from drow/duergar. You gain the Actor feat and proficiency with disguise kits." },
-            { range: [31,31], text: "You unwittingly earned a cult's favor and were given 1,000 gp to deliver to a secret shrine." },
-            { range: [32,32], text: "A master horse trainer mentored you. You have proficiency in Animal Handling and a warhorse." },
-            { range: [33,33], text: "In a fit of rage, you killed a cruel wizard who tortured your family. You gain the Mage Slayer feat." },
-            { range: [34,34], text: "You learned to cast Cure Wounds to save a dying elf. You gain the Magic Initiate feat (divine)." },
-            { range: [35,35], text: "Your warrior mentor died saving your village. You inherited their special weapon and the Martial Adept feat." },
-            { range: [36,36], text: "You were saved by a mercenary company. Their sergeant's words inspired you, granting the Inspiring Leader feat." },
-            { range: [37,37], text: "Raiders burned your village. You have proficiency in Stealth and Survival." },
-            { range: [38,38], text: "You were trapped in the Feywild for a decade. You have proficiency with Deception and Performance." },
-            { range: [39,39], text: "You alone saw a phoenix. As a bonus action, you can ignite your weapon with fire for 1 minute (1/rest)." },
-            { range: [40,40], text: "A dwarven armorer taught you a secret. You have a suit of adamantine armor." },
-            { range: [41,41], text: "You were imprisoned. You have proficiency in Intimidation or Deception and know thieves' cant." },
-            { range: [42,42], text: "You were an apprentice at a grand library. You gain the Skilled feat and a world-changing secret." },
-            { range: [43,43], text: "Your family helped medics in a war. You gain the Healer feat and proficiency in Medicine." },
-            { range: [44,44], text: "A professor gifted you a class-specific item after your parents refused to let you attend college." },
-            { range: [45,45], text: "You are the child of an archfey. You gain the Fey Touched feat." },
-            { range: [46,46], text: "An ancient druid taught you their ways. You gain the Wood Elf Magic feat." },
-            { range: [47,47], text: "You have received exceptional athletic training. You have proficiency (or expertise) in Athletics." },
-            { range: [48,48], text: "You have spent much of your time around animals. You have proficiency (or expertise) in Animal Handling." },
-            { range: [49,49], text: "You have studied the mystical arts extensively. You have proficiency (or expertise) in Arcana." },
-            { range: [50,50], text: "You have received exceptional acrobatic training. You have proficiency (or expertise) in Acrobatics." },
-            { range: [51,51], text: "You have needed to lie your way out of sticky situations. You have proficiency (or expertise) in Deception." },
-            { range: [52,52], text: "You have taken a keen interest in history. You have proficiency (or expertise) in History." },
-            { range: [53,53], text: "Reading people has been important to you. You have proficiency (or expertise) in Insight." },
-            { range: [54,54], text: "A large scar on your face indicates you've survived tough fights. You have proficiency (or expertise) in Intimidation." },
-            { range: [55,55], text: "You can put pieces together in difficult situations. You have proficiency (or expertise) in Investigation." },
-            { range: [56,56], text: "You provided medical aid in times of conflict. You have proficiency (or expertise) in Medicine." },
-            { range: [57,57], text: "An elder taught you about local flora and fauna. You have proficiency (or expertise) in Nature." },
-            { range: [58,58], text: "There is little that can pass your keen eye. You have proficiency (or expertise) in Perception." },
-            { range: [59,59], text: "You were part of a theatre troop. You have proficiency (or expertise) in Performance." },
-            { range: [60,60], text: "You are a devout follower of an obscure god. You have proficiency (or expertise) in Religion." },
-            { range: [61,61], text: "You peddled the shell game for cash. You have proficiency (or expertise) in Sleight of Hand." },
-            { range: [62,62], text: "Shadows seem to stick to you. You have proficiency (or expertise) in Stealth." },
-            { range: [63,63], text: "You were forced to survive in the wilderness for months. You have proficiency (or expertise) in Survival." },
-            { range: [64,64], text: "You are always ready for battle. You have proficiency in initiative checks." },
-            { range: [65,65], text: "You fled an arranged marriage. You start with an additional 1000 gp." },
-            { range: [66,66], text: "You harbored a fugitive, and your home was destroyed. You have proficiency in Survival and Medicine." },
-            { range: [67,67], text: "You witnessed a scene of chaos and felt changed. You have the Magic Initiate feat (Dunamancy spell list)." },
-            { range: [68,68], text: "You stumbled into another world. The chill of that place has yet to leave you. You have the Shadow Touched feat." },
-            { range: [69,69], text: "A dying woman gave you a rune-covered box to keep safe. You have an Umbra Box." },
-            { range: [70,70], text: "You awoke as the sole survivor of a fire, bearing burn scars. You may cast Burning Hands 2/day." },
-            { range: [71,71], text: "Born on the winter solstice, you were gifted by the goddess of winter. You gain the Magic Initiate feat (one cold spell)." },
-            { range: [72,72], text: "You found a dagger containing the soul of a priest of Nyx. You gain +1 to initiative at night." },
-            { range: [73,73], text: "You are a foreigner to this world. You can cast Absorb Elements once per long rest." },
-            { range: [74,74], text: "A government experiment replaced your blood. You have advantage on rolls to disarm, but metal weapons have advantage against you. Movement is reduced by 5 feet." },
-            { range: [75,75], text: "You were attacked by and contracted a rare form of lycanthropy (work with DM)." },
-            { range: [76,76], text: "A fairy taught you to sleep more effectively. 3 hours of sleep feels like 6." },
-            { range: [77,77], text: "A powerful fey found your good deeds annoying. Your eyes change color every time you sleep." },
-        ],
-        secrets: [
-            { range: [1,1], text: "Years ago, my best friend gave me a key that glowed with an icy blue light. I never saw that friend again." },
-            { range: [2,2], text: "I was the only witness to a cold-blooded murder. The killer took a gold coin with a ruby from the victim." },
-            { range: [3,3], text: "I dreamed an old stranger screamed “Scourger!” at me and then exploded into a column of flame." },
-            { range: [4,4], text: "I found a cliff with a bunch of caverns dug out of it, large enough for people to hide within." },
-            { range: [5,5], text: "I followed a cat with a strange sense of purpose to an elder's dwelling; it watched the window for an hour, then fled as if a spell was broken." },
-            { range: [6,6], text: "One of my parents left in a storm with a sword and shield, returning a week later with the shield in pieces. They never spoke of it." },
-            { range: [7,7], text: "My farmer friend's crops grew to immense sizes, then the friend and fields vanished. I never heard from them again." },
-            { range: [8,8], text: "I saw an enormous figure walking through the clouds on a stormy night. It looked at me, and then kept walking." },
-            { range: [9,9], text: "I woke to a sibling on my chest, saying, “The time is soon.” They have no memory of the event." },
-            { range: [10,10], text: "I saw a giant bird that cried my name, then disappeared beyond the clouds." },
-            { range: [11,11], text: "I ate a fruit whose seeds spelled a magic word. Years later, I saw the same word in a slice of bread." },
-            { range: [12,12], text: "My warrior friend died, but I sometimes see them in their old armor at the corner of my vision." },
-            { range: [13,13], text: "A seer gave me a vision of a flaming bird chained beneath a mountain, wailing in the darkness." },
-            { range: [14,14], text: "On a boat, I heard a rumbling voice and saw golden eyes looking up at me from below the water." },
-            { range: [15,15], text: "While eating, a potato exploded into worms, and I saw a vision of a gigantic worm eating the world." },
-            { range: [16,16], text: "I saw a tall figure with red skin and horns in a meadow. Flowers grew taller where they walked." },
-            { range: [17,17], text: "I was saved from wolves by a stranger with bandaged eyes, silver light, scars, and possibly black wings." },
-            { range: [18,18], text: "I burned myself forging a sword and had a vision of powerful weapons calling for me to wield them." },
-            { range: [19,19], text: "I met someone fleeing an evil place; they fell dead, and their body vanished before I could return with help." },
-            { range: [20,20], text: "I caught a falling star. It smiled and told me to look for it on the day when fire erupts from the earth." },
-            { range: [21,21], text: "I saw a man change into some mound of flesh and ran before I could get a real look." },
-            { range: [22,22], text: "While fishing, something immense pulled on my line before snapping it." },
-            { range: [23,23], text: "One foggy morning, I heard a sorrowful song from the river that faded when the sun rose." },
-            { range: [24,24], text: "A cat as black as midnight spoke to me of dread secrets and hidden courts. I remember its words in my sleep." },
-            { range: [25,25], text: "I had tea with a beautiful woman in a gazebo in a forest glade. The next day, the glade was filled only with wildflowers." },
-            { range: [26,26], text: "A finely dressed man came to my door, said he was at the wrong house, smiled too widely, and left." },
-            { range: [27,27], text: "I saw a coffin whose lid opened slightly, revealing an interior made of nothing but mirrors." },
-            { range: [28,28], text: "In jail, the rats spoke to me, and I had to treat it as normal." },
-            { range: [29,29], text: "I reached for a beautiful white flower, cut my hands on unseen thorns, and as I left, it turned red." },
-            { range: [30,30], text: "In the wind rustling through grain fields, I heard a voice that I can sometimes still faintly hear." },
-            { range: [31,31], text: "I spent a night with the Cat Prince. Since then, cats obey my commands, though not always gracefully." },
-            { range: [32,32], text: "My family has served a dwarf clan for generations, and in return for their support, I provided them with information." },
-            { range: [33,33], text: "I heard a song from a bard that spoke to me deeply. I've searched for it ever since but have found no trace." },
-            { range: [34,34], text: "I saved a shadowy creature from a grim fate. It now lives inside my own shadow." },
-            { range: [35,35], text: "I found a sword plunged into an engraved stone in the woods. I pulled it free effortlessly but told no one." },
-            { range: [36,36], text: "An ancient tree on our family's property was cut down. I found a single acorn and now seek to help it as it helped my family." },
-            { range: [37,37], text: "I was playing in an abandoned witch's hut and accidentally turned my mom into a frog." },
-            { range: [38,38], text: "I watched my mom kill my dad. She told me he just left." },
-            { range: [39,39], text: "I sold out my best friend for 100 gold for a crime I committed. (Gain one rival)." },
-            { range: [40,40], text: "I've written many books about heroic deeds, none of which I've actually done." },
-            { range: [41,41], text: "A fortune teller told me the date of my death... It's coming up soon." },
-            { range: [42,42], text: "My destitute merchant family lost a member to debt collectors as repayment for a bad loan." },
-            { range: [43,43], text: "I am a foreigner to this world, having fallen through a portal. I can cast Absorb Elements (1/long rest), but it triggers a Wild Magic Surge." },
-            { range: [44,44], text: "The stars have been screaming my name ever since the dragons returned." },
-            { range: [45,45], text: "My community considers me a fell omen. My heroics are seen as justifications for a town that is as cold as the void I dream of." },
-            { range: [46,46], text: "I feel myself slipping between seconds. A school with its name written in Celestial reached out to me." },
-            { range: [47,47], text: "I sold my soul to a 'friend' for a meal." },
-            { range: [48,48], text: "The diamond mafia holds my mother's soul hostage." },
-            { range: [49,49], text: "I found a shield in ancient ruins that sings to me of great purpose, but I do not feel ready." },
-            { range: [50,50], text: "I am in a death-loop. When I die, I return to an earlier point, but risk losing this power." },
-            { range: [51,51], text: "I was a potted plant that became a person in a wave of wild magic. I have Nature expertise and salads make me uncomfortable." },
-            { range: [52,52], text: "I made a deal with a devil and live in fear that they will call to collect." },
-            { range: [53,53], text: "I gained the Lucky feat from a deal, but each use adds a task to my debt. I start with 3 tasks owed." },
-            { range: [54,54], text: "I’ve been exiled twice under different names." },
-            { range: [55,55], text: "Local animals took me in during a storm before a hunter killed them. I do not eat meat." },
-            { range: [56,56], text: "A giant spider lived near my house. I killed it after it took livestock, and now I fear spiders." },
-            { range: [57,57], text: "A tree spoke to me, warning 'they were coming'. I always feel they might be right around the corner." },
-            { range: [58,58], text: "I am next in line to inherit a blood feud, but I am secretly friendly with my counterpart." },
-            { range: [59,59], text: "I am not the true heir of a powerful family; my servant mother swapped me with the real heir, who was given to a sinister being." },
-            { range: [60,60], text: "I am the heir of a destitute merchant family, and debt collectors have started to come calling." },
-            { range: [61,61], text: "I am a sentient weapon inhabiting a 'puppet' body." },
-            { range: [62,62], text: "A monster slaughtered my traveling companions but left me unharmed after sniffing me." },
-            { range: [63,63], text: "My twin died because of me, so I took their place. Only one person knows the truth." },
-            { range: [64,64], text: "I witnessed a marvel that left a mark on me, granting insight into mysteries others cannot understand." },
-            { range: [65,65], text: "I received a prophecy when I was young, and it has shaped my life ever since." },
-            { range: [66,66], text: "I discovered my community's faith was false. When I tried to reveal this, I was shunned." },
-            { range: [67,67], text: "My reflection is another person I can talk to, living in a similar but increasingly different world." },
-            { range: [68,68], text: "I fell into a chair and woke up in a cave where a sphinx said 'Find Me'." },
-            { range: [69,69], text: "An old spinster gave me a rabbit that has never aged and sometimes whispers things to me." },
-            { range: [70,70], text: "It once snowed ash, but I don't know from what." },
-            { range: [71,71], text: "At a funeral, I saw into Hell and watched Lilith cast a soul into damnation." },
-            { range: [72,72], text: "I saw a book that made me sick to look at. A priest couldn't burn it and was never the same." },
-            { range: [73,73], text: "Chairs seem to cause my mother pain." },
-            { range: [74,74], text: "Alcohol lets me see into the ethereal plane and hear the screams of the lost." },
-            { range: [75,75], text: "I went to where a star fell and saw a shadow with red eyes leave it, sinking into my soul." },
-            { range: [76,76], text: "My childhood friend became a wizard, went to college, and came back changed. They died a tenday later." },
-            { range: [77,77], text: "A stone in my town would sing to me about my future." },
-            { range: [78,78], text: "A tree was cut down, and I have a +1 dagger made from metal found under it and its wood." },
-            { range: [79,79], text: "My thumb was crushed by a hammer. A random man healed it and said, 'I will need you later.'" },
-            { range: [80,80], text: "Lightning struck me, I briefly died, and then was struck again and revived." },
-            { range: [81,81], text: "I saw a sibling die." },
-            { range: [82,82], text: "I lost a toe and have no memory of how." },
-            { range: [83,83], text: "I cannot hear out of my left ear on even days." },
-            { range: [84,84], text: "I used to climb mountains until I saw my face carved into the stone. I have never hiked again." },
-            { range: [85,85], text: "Tea makes me sick." },
-            { range: [86,86], text: "I sometimes speak in tongues (I can speak and understand Draconic)." },
-            { range: [87,87], text: "I saw Hecate speaking with someone and was so scared I passed out." },
-            { range: [88,88], text: "When pinched, I smell turnips." },
-            { range: [89,89], text: "I got lost in a blizzard and saw a maiden who said I would be okay. Snow now feels warm to me (I have cold resistance)." },
-            { range: [90,90], text: "I get paranoid when underground." },
-            { range: [91,91], text: "A large bird picked me up as a child and dropped me. I am scared of birds and heights." },
-            { range: [92,92], text: "As a child, the rain would sing stories to me. I no longer hear them but still enjoy listening." },
-            { range: [93,93], text: "I wear glasses, and sometimes when I have them on, I see things in the corner of my eye." },
-            { range: [94,94], text: "I hate reading but can read Arcana easily. I often write in it by mistake." },
-            { range: [95,95], text: "I beat someone in chess, and they died an hour later." },
-            { range: [96,96], text: "When I sleep, I am in a black void where I can see doors appear." },
-            { range: [97,97], text: "When I sleep, I am in a yellow mist void where I hear millions of voices working for the same thing." },
-            { range: [98,98], text: "When I sleep, I am in a white mist void where I can hear some of the prayers of people to good gods." },
-            { range: [99,99], text: "I have a letter of recommendation from a High Proxy because I was a nice kid to one of them." },
-            { range: [100,100], text: "I worked for the government on Wolgari, being pushed from job to job. I know too much." }
-        ],
-        descriptions: {
-            // Nations
-            "Arfordir": "A rugged coastal nation of skilled sailors and shipwrights, whose people are as hardy as the cliffs they live on.",
-            "Blū": "A serene, isolated nation built around a massive, magically infused forest. Its people are deeply connected to nature.",
-            "The Confederated State of the Half Heights": "A land of rolling hills and stout-hearted halflings, known for its agriculture and fierce defense of its borders.",
-            "Farnear": "A bustling trade hub where cultures collide, famous for its sprawling markets and valuable exports.",
-            "Fearledell": "An ancient, elven kingdom hidden within a misty valley, protective of its traditions and magical secrets.",
-            "Fook & Took": "Twin cities on opposite sides of a river, locked in a friendly but intense economic and cultural rivalry.",
-            "Haroldford": "A stoic, northern kingdom of dwarves, masters of smithing and stonework, with halls carved deep into the mountains.",
-            "Icebeach": "A harsh, frozen landscape where nomadic tribes hunt massive beasts and survive against the biting cold.",
-            "The Iron Bash": "A militaristic state dominated by orcs and goblinoids, where strength is law and conquest is a way of life.",
-            "The Province of Southern Fair": "A sun-drenched land of artists, poets, and philosophers, celebrated for its beauty and cultural achievements.",
-            "RoswiN": "A land of chivalrous knights and towering castles, where honor and duty are the highest virtues.",
-            "The Sovereign Island Nation of Relèv": "An elegant island nation of high elves, known for its powerful navy and mastery of arcane arts.",
-            "Bec": "The heart of the Beccin Empire, a heavily fortified capital city that projects imperial power across the continent.",
-            "Goldwind": "A fertile province known as the breadbasket of the Empire, its fields stretching as far as the eye can see.",
-            "Last Elven State": "A conquered elven kingdom now under Imperial rule, its people simmering with resentment and clinging to their lost glory.",
-            "Mt. Egma": "A volcanic mountain fortress where the Empire forges its finest weapons and trains its elite soldiers.",
-            "Astrousian City-State": "A generic term for one of the many independent, fortified cities that dot the dangerous jungles of Astrousia.",
-            "Athenium": "The capital of magic, a city built on floating islands and powered by immense arcane energies.",
-            "Frozen North": "The unforgiving arctic wasteland, home to hardy survivalists and creatures of ice and snow.",
-            "Naga": "A swampy, marsh-filled land inhabited by the serpentine Naga, rich with ancient secrets and potent venoms.",
-            "Oldlin": "A land of ancient forests and druidic circles, where the old ways of nature are still practiced.",
-            "Random Island": "One of the countless uncharted islands in the vast ocean, potentially holding anything from treasure to unspeakable horrors.",
-            "Wolgari": "A massive, bureaucratic nation of kobolds, where everything is managed through a complex and often absurd system of rules and forms.",
-            // Settlements
-            "Nutsten": "A bustling Astrousian city carved into the side of a giant, petrified tree.",
-            "Tooliken": "A town known for its ingenious clockwork inventions and automatons.",
-            "Unlik": "A remote town that serves as a last stop for adventurers heading into the deepest parts of the jungle.",
-            "Walkers": "A nomadic town built on the backs of colossal, slow-moving beasts.",
-            "Jungle": "A small, isolated village struggling to survive in the perilous Astrousian wilds.",
-            "Delphi": "The dazzling heart of Athenium, a city of soaring towers and magical wonders.",
-            "Delphi Suburb": "The residential districts surrounding Delphi, where mages and artisans live in magically-crafted homes.",
-            "Northern City": "An Athenium city focused on the study of elemental magic, built near a convergence of ley lines.",
-            "Southern City": "An Athenium city dedicated to illusion and enchantment, famous for its magical arts and theater.",
-            "Small Village": "A tiny, struggling settlement in the Frozen North, huddled together for warmth and protection.",
-            "Wandering Tribe": "A nomadic group that follows the migrating herds across the frozen tundra.",
-            "Fhoe": "A Naga village built on stilts above the murky swamp waters.",
-            "Lucinders": "A Naga town that trades in rare herbs and alchemical reagents found in the surrounding marshes.",
-            "No Beard": "A major Naga city, so named because its founders shaved the beards of defeated dwarven invaders.",
-            "Wingate": "A fortified Naga city that guards the entrance to their territory.",
-            "Goldstone": "An Oldlin town centered around a sacred, glowing stone that is the focus of druidic rituals.",
-            "Grey Sisters": "A quiet Oldlin village nestled between three ancient, moss-covered hills.",
-            "Knoll": "A town built atop a large, defensible hill, offering a clear view of the surrounding forest.",
-            "Nort": "An Oldlin logging town that has a tense relationship with the forest's guardians.",
-            "Attergo": "A major port city in Arfordir, its harbor filled with ships from across the world.",
-            "Crystal Cove": "A town in Arfordir famous for the beautiful, naturally-formed crystals found in its sea caves.",
-            "Gelwood": "An Arfordir village known for its unique, jelly-like trees that are harvested for food and alchemical ingredients.",
-            "Rockdrift": "A city in Arfordir built on a series of interconnected, rocky islands.",
-            "Fook": "The industrial heart of the twin cities, known for its foundries and workshops.",
-            "Took": "The cultural center of the twin cities, famous for its arts, cuisine, and lively festivals.",
-            "Casgate": "An Icebeach village that guards a crucial pass through the mountains.",
-            "Flamore": "An Icebeach village built around a series of natural hot springs, providing a rare source of warmth.",
-            "The Fractured Point": "The largest settlement in Icebeach, a city built on a peninsula of shattered, icy cliffs.",
-            "Winterhold Keep": "A solitary fortress that stands against the endless snows of Icebeach."
-        }
-    };
-    
+    // --- DATA LOADING --- //
+    let db = {};
+
     // --- STATE & UTILS --- //
     
     let character = {};
@@ -1195,12 +819,71 @@
 
     // --- INITIALIZATION --- //
     document.getElementById('btn-start-over').addEventListener('click', resetGenerator);
-    STEPS.forEach(stepName => {
-        if (stepName !== 'final') {
-            setControls(stepName, false);
-            addEventListeners(stepName);
+
+    async function loadData() {
+        console.log("Starting data load...");
+        const dataSources = {
+            homeland: 'data/homeland.json',
+            nations: 'data/nations.json',
+            settlements: 'data/settlements.json',
+            backgrounds: 'data/backgrounds.json',
+            socialStatus: 'data/socialStatus.json',
+            familySize: 'data/familySize.json',
+            familyRelationships: 'data/familyRelationships.json',
+            allyRelationships: 'data/allyRelationships.json',
+            rivalRelationships: 'data/rivalRelationships.json',
+            allyRivalIdentities: 'data/allyRivalIdentities.json',
+            fatefulMoments: 'data/fatefulMoments.json',
+            secrets: 'data/secrets.json',
+            descriptions: 'data/descriptions.json'
+        };
+
+        try {
+            const responses = await Promise.all(
+                Object.values(dataSources).map(url => fetch(url).then(res => {
+                    if (!res.ok) {
+                        console.error(`Failed to fetch ${url}: ${res.statusText}`);
+                        throw new Error(`Failed to fetch ${url}`);
+                    }
+                    return res.json();
+                }))
+            );
+            console.log("All files fetched successfully.");
+
+            const loadedData = Object.keys(dataSources).reduce((acc, key, index) => {
+                if (key === 'nations') {
+                    Object.assign(acc, responses[index]);
+                } else {
+                    acc[key] = responses[index];
+                }
+                return acc;
+            }, {});
+
+            db = loadedData;
+            console.log("Data processed and assigned to db object.");
+
+            document.getElementById('generator-container').classList.remove('opacity-50', 'pointer-events-none');
+            initializeGenerator();
+            console.log("Generator initialized.");
+
+        } catch (error) {
+            console.error("Failed to load game data:", error);
+            const container = document.getElementById('generator-container');
+            container.innerHTML = '<p class="text-red-500 text-center">Failed to load necessary data. Please refresh the page to try again.</p>';
+            container.classList.remove('opacity-50', 'pointer-events-none');
         }
-    });
+    }
+
+    function initializeGenerator() {
+        STEPS.forEach(stepName => {
+            if (stepName !== 'final') {
+                setControls(stepName, false);
+                addEventListeners(stepName);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadData);
 
 </script>
 </body>

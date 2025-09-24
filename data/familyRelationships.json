@@ -1,0 +1,12 @@
+[
+    { "range": [1, 10], "type": "rival", "text": "You thought you killed this family member, but now they’re out for your blood." },
+    { "range": [11, 20], "type": "rival", "text": "You insulted this family member so gravely that they left your life forever. They will return to settle the score." },
+    { "range": [21, 30], "type": "rival", "text": "You have always been better than this family member at something. They grew jealous and will return to best you." },
+    { "range": [31, 40], "type": "rival", "text": "You uncovered a secret about this family member. They now seek to unveil your darkest secret." },
+    { "range": [41, 50], "type": "rival", "text": "You and this family member have a friendly rivalry and constantly test each other's skills." },
+    { "range": [51, 60], "type": "ally", "text": "This family member owes you a debt. They’ll help you, but only to clear the slate." },
+    { "range": [61, 70], "type": "ally", "text": "This family member loves you but you were never close. They’ll help you as long as there is no risk of injury or death." },
+    { "range": [71, 80], "type": "ally", "text": "This family member caused you a horrible accident as a child and feels incredible guilt." },
+    { "range": [81, 90], "type": "ally", "text": "This family member left long ago, promising to return in your hour of greatest need." },
+    { "range": [91, 100], "type": "ally", "text": "This family member has always loved you with all their heart and would do anything for you." }
+]

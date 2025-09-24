@@ -1,0 +1,14 @@
+[
+    { "range": [1, 5], "name": "Commoner", "fateful": 0 }, { "range": [6, 10], "name": "Acolyte", "fateful": 0 },
+    { "range": [11, 15], "name": "Bandit", "fateful": 0 }, { "range": [16, 20], "name": "Bandit Captain", "fateful": 0 },
+    { "range": [21, 25], "name": "Berserker", "fateful": 0 }, { "range": [26, 30], "name": "Cultist", "fateful": 0 },
+    { "range": [31, 35], "name": "Cult Fanatic", "fateful": 1 }, { "range": [36, 40], "name": "Druid", "fateful": 0 },
+    { "range": [41, 45], "name": "Gladiator", "fateful": 1 }, { "range": [46, 50], "name": "Guard", "fateful": 0 },
+    { "range": [51, 55], "name": "Knight", "fateful": 0 }, { "range": [56, 60], "name": "Priest", "fateful": 0 },
+    { "range": [61, 65], "name": "Scout", "fateful": 0 }, { "range": [66, 70], "name": "Spy", "fateful": 0 },
+    { "range": [71, 75], "name": "Tribal Warrior", "fateful": 0 }, { "range": [76, 80], "name": "Veteran", "fateful": 0 },
+    { "range": [81, 84], "name": "Mage", "fateful": 1 }, { "range": [85, 88], "name": "Noble", "fateful": 1 },
+    { "range": [89, 92], "name": "Assassin", "fateful": 1 }, { "range": [93, 94], "name": "Blood Hunter", "fateful": 1 },
+    { "range": [95, 96], "name": "Good/Neutral Werebeast", "fateful": 1 }, { "range": [97, 98], "name": "Evil Werebeast", "fateful": 1 },
+    { "range": [99, 99], "name": "Archmage", "fateful": 1 }, { "range": [100, 100], "name": "High Proxy", "fateful": 2 }
+]

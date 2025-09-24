@@ -1,0 +1,7 @@
+[
+    { "range": [1, 40], "name": "Gilded Nations", "description": "A wealthy, competitive coalition of city-states and kingdoms known for artisans, merchants, and complex politics." },
+    { "range": [41, 80], "name": "Beccin Empire", "description": "A sprawling, ancient empire defined by its strict laws, powerful legions, and a history of conquest." },
+    { "range": [81, 90], "name": "Astrousia", "description": "A mysterious jungle continent dotted with independent city-states, ancient ruins, and exotic beasts." },
+    { "range": [91, 95], "name": "Athenium", "description": "A beacon of knowledge and arcane mastery, where magic is woven into the fabric of everyday life." },
+    { "range": [96, 100], "name": "Other", "description": "The vast, untamed lands beyond the major powers, from frozen wastes to scattered islands." }
+]

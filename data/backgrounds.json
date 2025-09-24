@@ -1,0 +1,22 @@
+[
+    { "roll": 1, "name": "Acolyte", "description": "You served a temple, learning sacred rites. You are a trusted member of your faith." },
+    { "roll": 2, "name": "Charlatan", "description": "You're a master of deceit, using wit and charm to live a life of scams and cons." },
+    { "roll": 3, "name": "Criminal", "description": "You have a history of breaking the law and contacts within the criminal underworld." },
+    { "roll": 4, "name": "Entertainer", "description": "You lived a life of performance, captivating audiences and earning renown for your art." },
+    { "roll": 5, "name": "Folk Hero", "description": "You come from humble beginnings, but an act of great courage has made you a champion of the common people." },
+    { "roll": 6, "name": "Guild Artisan", "description": "You were a member of an artisan's guild, skilled in a specific trade and connected to its network." },
+    { "roll": 7, "name": "Hermit or Student", "description": "You lived in seclusion, either for quiet contemplation or dedicated study, uncovering a great secret." },
+    { "roll": 8, "name": "Noble", "description": "You were born to privilege, wielding social power and bearing the weight of a family name." },
+    { "roll": 9, "name": "Outlander", "description": "You grew up in the wilds, far from civilization, with an expert knowledge of survival and the natural world." },
+    { "roll": 10, "name": "Sage", "description": "You are a master of lore, having spent your life in the pursuit of knowledge." },
+    { "roll": 11, "name": "Sailor or Marine", "description": "You have spent your life on the sea, facing its dangers and navigating by the stars." },
+    { "roll": 12, "name": "Soldier", "description": "You served in an army, defined by discipline, rank, and the harsh realities of war." },
+    { "roll": 13, "name": "Spy", "description": "You operated in the shadows, a life of intrigue, espionage, and carefully guarded secrets." },
+    { "roll": 14, "name": "Urchin or Smuggler", "description": "You grew up on the streets, surviving by your wits and learning the secret ways of your city." },
+    { "roll": 15, "name": "Special Agent", "description": "You worked for a clandestine organization, undertaking secret missions for a hidden cause." },
+    { "roll": 16, "name": "Archaeologist or Anthropologist", "description": "You delve into the past, uncovering ancient artifacts and studying forgotten cultures." },
+    { "roll": 17, "name": "Fisher", "description": "Your life has been tied to the water, providing for your community by net and line." },
+    { "roll": 18, "name": "Investigator", "description": "You have a knack for solving puzzles and uncovering the truth, often in the darkest of places." },
+    { "roll": 19, "name": "Inheritor", "description": "You have received a significant inheritance—an item of power or a destiny you must fulfill." },
+    { "roll": 20, "name": "Bounty Hunter", "description": "You make your living tracking down others for coin, operating on either side of the law." }
+]
