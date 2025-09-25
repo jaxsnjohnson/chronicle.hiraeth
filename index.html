@@ -6,14 +6,12 @@
     <title>Pythia Chronicle Backstory Generator</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📜</text></svg>">
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
     <meta property="og:title" content="Pythia Chronicle Backstory Generator">
     <meta property="og:description" content="An interactive, story-driven character backstory generator for TTRPGs.">
     <meta property="og:image" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://chronicle.hiraeth.wiki/preview/Pythia-Chronicle-Preview.png">
     <meta property="twitter:title" content="Pythia Chronicle Backstory Generator">
@@ -71,6 +69,9 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 min-h-screen p-4 sm:p-8">
@@ -81,8 +82,35 @@
             <p class="text-xl text-gray-400 mt-2">A Backstory Generator</p>
         </header>
 
+        <section class="mb-6">
+            <button id="toggle-explanation" class="w-full text-left text-xl font-bold text-amber-500 hover:text-amber-400 focus:outline-none flex items-center">
+                <span id="explanation-arrow" class="inline-block transition-transform duration-300 transform mr-2">&#9654;</span> What is this?
+            </button>
+            <div id="explanation-content" class="hidden mt-4 text-gray-400 space-y-4 border-l-2 border-amber-800/50 pl-4">
+                <div>
+                    <h4 class="text-lg font-bold text-amber-400">A Narrative-First Approach</h4>
+                    <p>Before the first sword is drawn, before the first spell is cast, a hero is born from a story. This is not just a character generator; it is a narrative forge, inspired by the Heroic Chronicle system, designed to breathe life into your adventures. Here, you and your Dungeon Master can collaborate to weave a character rich with history, purpose, and a tangible connection to the world of Hiraeth. Prepare to unearth proficiencies, claim magic items, and even discover latent feats or spells before your journey officially begins.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-amber-400">Let Inspiration Be Your Guide</h4>
+                    <p>This chronicle begins with a blank page. Forget class, race, or even a name. Let the currents of fate guide you. The events that unfold through these rolls are sparks to ignite your imagination. Embrace the unexpected, and don't be afraid to disregard what doesn't resonate. This is a tool to inspire, not to limit. You may come with one hero in mind and leave with another, far more compelling than you could have ever planned.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-amber-400">Unearth Your Backstory</h4>
+                    <p>The first part of your chronicle delves into the roots of your character. It is a journey into their past, exploring their upbringing, their complex family ties, and their first steps in the wider world of Hiraeth. What flavors do they savor? What ancient mysteries did they stumble upon in their youth? This is the foundation upon which your legend will be built.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-amber-400">Embrace Your Prophecy</h4>
+                    <p>Every great story is driven by purpose. The "Prophecy" section will help you and your DM establish three powerful goals for your character. These are not mere tasks, but narrative quests that will shape your adventure, offering meaningful mechanical rewards upon their completion. This is where your character's destiny begins to take shape.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold text-amber-400">A Tool for All Creators</h4>
+                    <p>The Chronicle is not just for heroes. Dungeon Masters are encouraged to use this system to forge unforgettable villains and nuanced NPCs. Give your world depth by creating characters who feel as real and storied as those sitting at your table.</p>
+                </div>
+            </div>
+        </section>
+
         <main id="generator-container" class="space-y-6 opacity-50 pointer-events-none">
-            <!-- Step 1: Homeland -->
             <section id="step-homeland" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg active">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 1: Homeland</h2>
                 <p class="mb-4 text-gray-400">Your story begins with the land of your birth. Click the button to determine where your character is from.</p>
@@ -92,67 +120,54 @@
                 <div id="result-homeland" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
 
-            <!-- Step 2: Background -->
             <section id="step-background" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 2: Background</h2>
                 <p class="mb-4 text-gray-400">What did you do before the life of an adventurer called to you?</p>
                 <div id="controls-background">
-                     <!-- Buttons injected by JS -->
-                </div>
+                     </div>
                 <div id="result-background" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
 
-            <!-- Step 3: Social Status -->
             <section id="step-social-status" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 3: Social Status</h2>
                 <p class="mb-4 text-gray-400">Based on your homeland and background, your place in society is set. This determines your initial allies and rivals.</p>
                 <div id="controls-social-status">
-                    <!-- Buttons injected by JS -->
-                </div>
+                    </div>
                 <div id="result-social-status" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
             
-            <!-- Step 4: Family -->
             <section id="step-family" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 4: Family</h2>
                 <p class="mb-4 text-gray-400">The size of your settlement influences the size of your family. Let's see who you grew up with.</p>
                  <div id="controls-family">
-                    <!-- Buttons injected by JS -->
-                </div>
+                    </div>
                 <div id="result-family" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
 
-            <!-- Step 5: Allies & Rivals -->
             <section id="step-allies-rivals" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 5: Allies & Rivals</h2>
                 <p class="mb-4 text-gray-400">Friends and foes shape our lives. Let's discover the key relationships from your past.</p>
                 <div id="controls-allies-rivals">
-                    <!-- Buttons injected by JS -->
-                </div>
+                    </div>
                 <div id="result-allies-rivals" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
             
-            <!-- Step 6: Fateful Moments -->
             <section id="step-fateful-moments" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 6: Fateful Moments</h2>
                 <p class="mb-4 text-gray-400">Powerful allies and rivals create turning points in your life. Let's see what events defined you.</p>
                 <div id="controls-fateful-moments">
-                    <!-- Buttons injected by JS -->
-                </div>
+                    </div>
                 <div id="result-fateful-moments" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
 
-            <!-- Step 7: Mysterious Secret -->
             <section id="step-secret" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Step 7: Mysterious Secret</h2>
                 <p class="mb-4 text-gray-400">Every adventurer has a secret. What is yours?</p>
                 <div id="controls-secret">
-                    <!-- Buttons injected by JS -->
-                </div>
+                    </div>
                 <div id="result-secret" class="bg-gray-800 border border-amber-800 p-4 rounded-lg mt-4 text-amber-100 hidden"></div>
             </section>
             
-            <!-- Final Output -->
             <section id="step-final" class="step-card bg-gray-800/50 border border-amber-900 p-6 rounded-lg shadow-lg hidden">
                 <h2 class="text-3xl font-bold text-amber-500 mb-4">Your Character Chronicle</h2>
                 <p class="mb-4 text-gray-400">This is the complete summary of your character's backstory.</p>
@@ -164,14 +179,12 @@
         </main>
     </div>
 
-    <!-- Custom Modal for prompts -->
     <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300 hidden opacity-0">
         <div class="bg-gray-900 text-white p-6 rounded-lg shadow-2xl border border-amber-700 max-w-sm w-full transform transition-transform duration-300 scale-95">
             <h3 id="modal-title" class="text-xl font-bold mb-4">Question</h3>
             <p id="modal-text" class="mb-4">Please make a choice.</p>
             <div id="modal-options" class="flex justify-end space-x-2">
-                <!-- Buttons will be injected here by JS -->
-            </div>
+                </div>
         </div>
     </div>
     
@@ -1033,6 +1046,18 @@
                 addEventListeners(stepName);
             }
         });
+
+        // Add event listener for the explanation toggle
+        const toggleButton = document.getElementById('toggle-explanation');
+        const explanationContent = document.getElementById('explanation-content');
+        const explanationArrow = document.getElementById('explanation-arrow');
+
+        if (toggleButton && explanationContent && explanationArrow) {
+            toggleButton.addEventListener('click', () => {
+                const isHidden = explanationContent.classList.toggle('hidden');
+                explanationArrow.classList.toggle('rotate-90', !isHidden);
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', loadData);
